@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:desafio_flutter/app/data/model/movie_model.dart';
+import 'package:desafio_flutter/app/data/model/genres_model.dart';
+
 import 'package:desafio_flutter/app/data/repository/movie_repository.dart';
+import 'package:desafio_flutter/app/data/repository/genres_repository.dart';
 
 class HomeController extends GetxController {
   final MovieRepository? movieRepository;
-  HomeController({@required this.movieRepository})
-      : assert(movieRepository != null);
+  final GenresRepository? genresRepository;
+  HomeController(
+      {@required this.movieRepository, @required this.genresRepository})
+      : assert(movieRepository != null, genresRepository != null);
 
   bool isLoading = true;
   List<MovieModel> movieList = [];
+  List<GenresModel> genresList = [];
 
   @override
   void onInit() {
@@ -19,7 +25,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchData() async {
-    movieList = await getGenreMovies(28);
+    genresList = await genresRepository?.getGenresList();
+    movieList = await movieRepository?.getGenreMovies(genresList[0].id);
     isLoading = false;
     update();
   }
