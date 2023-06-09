@@ -1,5 +1,6 @@
 part of './app_pages.dart';
 
-abstract class Routes{
+abstract class Routes {
   static const HOME = '/home';
+  static const DETAILS = '/details';
 }
