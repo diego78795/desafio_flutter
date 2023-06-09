@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:desafio_flutter/app/data/model/movie_model.dart';
+import 'package:desafio_flutter/app/data/model/genres_model.dart';
 import 'package:desafio_flutter/app/controllers/home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -12,18 +13,75 @@ class HomePage extends GetView<HomeController> {
     return Scaffold(body: GetBuilder<HomeController>(builder: (_) {
       return SafeArea(
           child: Center(
-              child: SizedBox(
-                  width: 320,
-                  child: ListView.separated(
-                    itemCount: _.movieList.length,
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: 16);
-                    },
-                    itemBuilder: (context, index) {
-                      return CardMovie(movie: _.movieList[index]);
-                    },
-                  ))));
+              child: controller.isLoading
+                  ? const CircularProgressIndicator()
+                  : SizedBox(
+                      width: 320,
+                      child: ListView(shrinkWrap: true, children: [
+                        SizedBox(
+                            height: 28,
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _.genresList.length,
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(width: 12);
+                              },
+                              itemBuilder: (context, index) {
+                                return GenreButton(
+                                    genre: _.genresList[index],
+                                    genreSelected: _.genreSelected);
+                              },
+                            )),
+                        ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _.movieList.length,
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(height: 16);
+                          },
+                          itemBuilder: (context, index) {
+                            return CardMovie(movie: _.movieList[index]);
+                          },
+                        )
+                      ]))));
     }));
+  }
+}
+
+class GenreButton extends StatelessWidget {
+  const GenreButton(
+      {super.key, required this.genre, required this.genreSelected});
+
+  final GenresModel genre;
+  final String genreSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<HomeController>(
+      builder: (_) {
+        return ElevatedButton(
+          onPressed: () async => {await _.handleGenreMovie(genre)},
+          style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll<Color>(
+                genre.name == genreSelected
+                    ? const Color.fromRGBO(0, 56, 76, 1)
+                    : const Color.fromRGBO(241, 243, 245, 1)),
+            shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(26))),
+          ),
+          child: Text(genre.name,
+              style: TextStyle(
+                color: genre.name == genreSelected
+                    ? const Color.fromRGBO(241, 243, 245, 1)
+                    : const Color.fromRGBO(0, 56, 76, 1),
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w300,
+                fontSize: 12,
+              )),
+        );
+      },
+    );
   }
 }
 
@@ -34,7 +92,6 @@ class CardMovie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('$movie');
     return Stack(children: [
       ShaderMask(
         shaderCallback: (rect) {
