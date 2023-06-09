@@ -18,6 +18,8 @@ class HomePage extends GetView<HomeController> {
                   : SizedBox(
                       width: 320,
                       child: ListView(shrinkWrap: true, children: [
+                        const SearchInput(),
+                        const SizedBox(height: 16),
                         SizedBox(
                             height: 28,
                             child: ListView.separated(
@@ -49,6 +51,38 @@ class HomePage extends GetView<HomeController> {
                         )
                       ]))));
     }));
+  }
+}
+
+class SearchInput extends StatelessWidget {
+  const SearchInput({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var searchText = TextEditingController();
+    return GetBuilder<HomeController>(
+      builder: (_) {
+        return TextField(
+          controller: searchText,
+          onSubmitted: (text) => _.searchMovie(text),
+          decoration: InputDecoration(
+              filled: true,
+              fillColor: const Color.fromRGBO(241, 243, 245, 1),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                      width: 1, color: Color.fromRGBO(0, 56, 76, 1)),
+                  borderRadius: BorderRadius.circular(100)),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.transparent),
+                  borderRadius: BorderRadius.circular(100)),
+              hintText: "Pesquise filmes",
+              prefixIcon: IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () => _.searchMovie(searchText.text.toString()),
+              )),
+        );
+      },
+    );
   }
 }
 
