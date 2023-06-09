@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:desafio_flutter/app/routes/app_pages.dart';
 import 'package:desafio_flutter/app/data/model/movie_model.dart';
 import 'package:desafio_flutter/app/data/model/genres_model.dart';
 import 'package:desafio_flutter/app/controllers/home_controller.dart';
@@ -139,71 +140,76 @@ class CardMovie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 470.0,
-        width: 320.0,
-        child: Stack(fit: StackFit.expand, children: [
-          ShaderMask(
-            shaderCallback: (rect) {
-              return const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.white, Colors.black],
-              ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+    return GestureDetector(
+        onTap: () => {
+              Get.toNamed(Routes.DETAILS, arguments: {"movie_id": movie.id})
             },
-            child: FittedBox(
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: movie.img != null
-                        ? Image.network(
-                            'https://image.tmdb.org/t/p/w300${movie.img}',
-                            fit: BoxFit.fitHeight,
-                          )
-                        : Container(
-                            height: 470.0,
-                            width: 320.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: const Color.fromRGBO(0, 56, 76, 1),
-                            ),
-                            child: const Center(
-                                child: Text('Este filme não possui imagem',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 20,
-                                    ))),
-                          ))),
-          ),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                      child: Text(
-                    movie.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
-                  )),
-                  const SizedBox(height: 9),
-                  Text(
-                    genres,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 10,
-                    ),
-                  )
-                ],
-              ))
-        ]));
+        child: SizedBox(
+            height: 470.0,
+            width: 320.0,
+            child: Stack(fit: StackFit.expand, children: [
+              ShaderMask(
+                shaderCallback: (rect) {
+                  return const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.white, Colors.black],
+                  ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+                },
+                child: FittedBox(
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: movie.img != null
+                            ? Image.network(
+                                'https://image.tmdb.org/t/p/w300${movie.img}',
+                                fit: BoxFit.fitHeight,
+                              )
+                            : Container(
+                                height: 470.0,
+                                width: 320.0,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color.fromRGBO(0, 56, 76, 1),
+                                ),
+                                child: const Center(
+                                    child: Text('Este filme não possui imagem',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'Montserrat',
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20,
+                                        ))),
+                              ))),
+              ),
+              Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                          child: Text(
+                        movie.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      )),
+                      const SizedBox(height: 9),
+                      Text(
+                        genres,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 10,
+                        ),
+                      )
+                    ],
+                  ))
+            ])));
   }
 }
