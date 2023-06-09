@@ -40,6 +40,14 @@ class HomeController extends GetxController {
     movieList = await movieRepository?.getGenreMovies(genre.id);
   }
 
+  genreMovie(List genres) {
+    String genresName = genres
+        .map((genre) =>
+            genresList.where((genreList) => genreList.id == genre).first.name)
+        .toString();
+    return genresName.substring(1, genresName.length - 1).replaceAll(",", " -");
+  }
+
   Future handleGenreMovie(GenresModel genre) async {
     isLoading = true;
     update();
