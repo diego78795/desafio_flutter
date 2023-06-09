@@ -14,6 +14,10 @@ class HomeController extends GetxController {
       {@required this.movieRepository, @required this.genresRepository})
       : assert(movieRepository != null, genresRepository != null);
 
+  final _genreSelected = "".obs;
+  get genreSelected => _genreSelected.value;
+  set genreSelected(value) => _genreSelected.value = value;
+
   bool isLoading = true;
   List<MovieModel> movieList = [];
   List<GenresModel> genresList = [];
@@ -26,12 +30,21 @@ class HomeController extends GetxController {
 
   Future<void> fetchData() async {
     genresList = await genresRepository?.getGenresList();
-    movieList = await movieRepository?.getGenreMovies(genresList[0].id);
+    await getGenreMovies(genresList[0]);
     isLoading = false;
     update();
   }
 
-  Future<List<MovieModel>> getGenreMovies(int idGenre) async {
-    return await movieRepository?.getGenreMovies(idGenre);
+  Future getGenreMovies(GenresModel genre) async {
+    genreSelected = genre.name;
+    movieList = await movieRepository?.getGenreMovies(genre.id);
+  }
+
+  Future handleGenreMovie(GenresModel genre) async {
+    isLoading = true;
+    update();
+    await getGenreMovies(genre);
+    isLoading = false;
+    update();
   }
 }
