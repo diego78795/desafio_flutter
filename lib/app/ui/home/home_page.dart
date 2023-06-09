@@ -146,10 +146,27 @@ class CardMovie extends StatelessWidget {
             child: FittedBox(
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      'https://image.tmdb.org/t/p/w300${movie.img}',
-                      fit: BoxFit.fitHeight,
-                    ))),
+                    child: movie.img != null
+                        ? Image.network(
+                            'https://image.tmdb.org/t/p/w300${movie.img}',
+                            fit: BoxFit.fitHeight,
+                          )
+                        : Container(
+                            height: 470.0,
+                            width: 320.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: const Color.fromRGBO(0, 56, 76, 1),
+                            ),
+                            child: const Center(
+                                child: Text('Este filme não possui imagem',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20,
+                                    ))),
+                          ))),
           ),
           Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
