@@ -9,4 +9,8 @@ class MovieRepository {
   Future getGenreMovies(int idGenre) {
     return apiClient!.apiGenreMovies(idGenre);
   }
+
+  Future getSearchMovies(String searchText) {
+    return apiClient!.apiSearchMovies(searchText);
+  }
 }
