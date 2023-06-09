@@ -18,6 +18,14 @@ class HomePage extends GetView<HomeController> {
                   : SizedBox(
                       width: 320,
                       child: ListView(shrinkWrap: true, children: [
+                        const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 24),
+                            child: Text('Filmes',
+                                style: TextStyle(
+                                    color: Color.fromRGBO(52, 58, 64, 1),
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18))),
                         const SearchInput(),
                         const SizedBox(height: 16),
                         SizedBox(
