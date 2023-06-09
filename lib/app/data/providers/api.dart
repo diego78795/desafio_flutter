@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:desafio_flutter/app/data/model/details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -57,6 +58,24 @@ class ApiClient {
         List<dynamic> jsonResponse = jsonDecode(response.body)["genres"];
         return jsonResponse
             .map((movieJson) => GenresModel.fromJson(movieJson))
+            .toList();
+      } else {
+        debugPrint('Error -apiGenresList');
+      }
+    } catch (e) {
+      debugPrint('Error fetching from API $e');
+    }
+    return [];
+  }
+
+  Future<List<DetailsModel>> apiDetailsMovie(int idMovie) async {
+    try {
+      final response = await httpClient!.get(Uri.parse(
+          '$baseUrl/genre/movie/$idMovie?language=pt-BR&api_key=$apiKey'));
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = jsonDecode(response.body);
+        return jsonResponse
+            .map((movieJson) => DetailsModel.fromJson(movieJson))
             .toList();
       } else {
         debugPrint('Error -apiGenresList');
