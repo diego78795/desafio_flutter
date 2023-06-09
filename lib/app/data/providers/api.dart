@@ -31,6 +31,24 @@ class ApiClient {
     return [];
   }
 
+  Future<List<MovieModel>> apiSearchMovies(String searchText) async {
+    try {
+      final response = await httpClient!.get(Uri.parse(
+          '$baseUrl/search/movie?query=$searchText&language=pt-BR&api_key=$apiKey'));
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = jsonDecode(response.body)["results"];
+        return jsonResponse
+            .map((movieJson) => MovieModel.fromJson(movieJson))
+            .toList();
+      } else {
+        debugPrint('Error -apiSearchMovies$searchText');
+      }
+    } catch (e) {
+      debugPrint('Error fetching from API $e');
+    }
+    return [];
+  }
+
   Future<List<GenresModel>> apiGenresList() async {
     try {
       final response = await httpClient!.get(Uri.parse(
