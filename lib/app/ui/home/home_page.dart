@@ -63,7 +63,7 @@ class GenreButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       builder: (_) {
-        return ElevatedButton(
+        return TextButton(
           onPressed: () async => {await _.handleGenreMovie(genre)},
           style: ButtonStyle(
             backgroundColor: MaterialStatePropertyAll<Color>(
