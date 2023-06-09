@@ -1,6 +1,6 @@
 class MovieModel {
   int id = 0;
-  String img = '';
+  String? img = '';
   String title = '';
   List<dynamic> genres = [];
 
