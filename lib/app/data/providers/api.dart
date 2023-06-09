@@ -68,21 +68,19 @@ class ApiClient {
     return [];
   }
 
-  Future<List<DetailsModel>> apiDetailsMovie(int idMovie) async {
+  Future<Object> apiDetailsMovie(int idMovie) async {
     try {
-      final response = await httpClient!.get(Uri.parse(
-          '$baseUrl/genre/movie/$idMovie?language=pt-BR&api_key=$apiKey'));
+      final response = await httpClient!.get(
+          Uri.parse('$baseUrl/movie/$idMovie?language=pt-BR&api_key=$apiKey'));
       if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = jsonDecode(response.body);
-        return jsonResponse
-            .map((movieJson) => DetailsModel.fromJson(movieJson))
-            .toList();
+        Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        return DetailsModel.fromJson(jsonResponse);
       } else {
-        debugPrint('Error -apiGenresList');
+        debugPrint('Error -apiDetailsMovie');
       }
     } catch (e) {
       debugPrint('Error fetching from API $e');
     }
-    return [];
+    return {};
   }
 }

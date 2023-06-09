@@ -2,13 +2,13 @@ class DetailsModel {
   int id = 0;
   String? img = '';
   String title = '';
-  String voteAverage = '';
+  double voteAverage = 0.0;
   String originalTitle = '';
   String releaseDate = '';
-  String runtime = '';
+  int runtime = 0;
   List<dynamic> genres = [];
   String overview = '';
-  String budget = '';
+  int budget = 0;
   List<dynamic> productionCompanies = [];
 
   DetailsModel();
