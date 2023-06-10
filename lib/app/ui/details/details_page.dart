@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
 import 'package:desafio_flutter/app/controllers/details_controller.dart';
@@ -9,6 +10,7 @@ class DetailsPage extends GetView<DetailsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: GetBuilder<DetailsController>(builder: (_) {
+      final money = NumberFormat("#,##0");
       return SafeArea(
           child: Center(
               child: controller.isLoading
@@ -84,7 +86,33 @@ class DetailsPage extends GetView<DetailsController> {
                                     child: ContainerGenre(
                                         genre: genre['name'].toUpperCase())))
                                 .toList(),
-                          )
+                          ),
+                          const SizedBox(height: 56),
+                          const Text('Descrição',
+                              style: TextStyle(
+                                  color: Color.fromRGBO(94, 103, 112, 1),
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14)),
+                          const SizedBox(height: 8),
+                          Text(_.details.overview,
+                              style: const TextStyle(
+                                  color: Color.fromRGBO(52, 58, 64, 1),
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12)),
+                          const SizedBox(height: 49),
+                          ContainerInfo(
+                              field: 'ORÇAMENTO: ',
+                              info: '\$ ${money.format(_.details.budget)}'),
+                          const SizedBox(height: 4),
+                          ContainerInfo(
+                              field: 'PRODUTORAS: ',
+                              info: _.details.productionCompanies
+                                  .map((companie) => companie['name'])
+                                  .toString()
+                                  .replaceFirst("(", "")
+                                  .replaceFirst(")", ""))
                         ])));
     }));
   }
@@ -163,28 +191,27 @@ class ContainerInfo extends GetView<DetailsController> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: const Color.fromRGBO(241, 243, 245, 1),
       ),
-      child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Row(
-            children: [
-              Text(field,
-                  style: const TextStyle(
-                      color: Color.fromRGBO(134, 142, 150, 1),
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12)),
-              Text(info,
-                  style: const TextStyle(
-                      color: Color.fromRGBO(52, 58, 64, 1),
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14))
-            ],
-          )),
+      child: Wrap(
+        children: [
+          Text(field,
+              style: const TextStyle(
+                  color: Color.fromRGBO(134, 142, 150, 1),
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12)),
+          Text(info,
+              style: const TextStyle(
+                  color: Color.fromRGBO(52, 58, 64, 1),
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14))
+        ],
+      ),
     );
   }
 }
