@@ -88,19 +88,8 @@ class DetailsPage extends GetView<DetailsController> {
                                 .toList(),
                           ),
                           const SizedBox(height: 56),
-                          const Text('Descrição',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(94, 103, 112, 1),
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14)),
-                          const SizedBox(height: 8),
-                          Text(_.details.overview,
-                              style: const TextStyle(
-                                  color: Color.fromRGBO(52, 58, 64, 1),
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12)),
+                          TextMovie(
+                              title: 'Descrição', text: _.details.overview),
                           const SizedBox(height: 49),
                           ContainerInfo(
                               field: 'ORÇAMENTO: ',
@@ -112,7 +101,11 @@ class DetailsPage extends GetView<DetailsController> {
                                   .map((companie) => companie['name'])
                                   .toString()
                                   .replaceFirst("(", "")
-                                  .replaceFirst(")", ""))
+                                  .replaceFirst(")", "")),
+                          const SizedBox(height: 40),
+                          TextMovie(title: 'Diretor', text: _.director),
+                          const SizedBox(height: 32),
+                          TextMovie(title: 'Elenco', text: _.cast)
                         ])));
     }));
   }
@@ -237,5 +230,30 @@ class ContainerGenre extends GetView<DetailsController> {
                   fontWeight: FontWeight.w500,
                   fontSize: 14))),
     );
+  }
+}
+
+class TextMovie extends GetView<DetailsController> {
+  const TextMovie({super.key, required this.title, required this.text});
+  final String title;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(title,
+          style: const TextStyle(
+              color: Color.fromRGBO(94, 103, 112, 1),
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w400,
+              fontSize: 14)),
+      const SizedBox(height: 8),
+      Text(text,
+          style: const TextStyle(
+              color: Color.fromRGBO(52, 58, 64, 1),
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w500,
+              fontSize: 12)),
+    ]);
   }
 }
