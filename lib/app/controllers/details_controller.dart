@@ -11,7 +11,6 @@ class DetailsController extends GetxController {
   bool isLoading = true;
 
   DetailsModel details = DetailsModel();
-  int idMovie = Get.arguments["movie_id"];
 
   @override
   void onInit() {
@@ -20,7 +19,9 @@ class DetailsController extends GetxController {
   }
 
   Future<void> fetchData() async {
-    details = await detailsRepository?.getDetailsMovie(idMovie);
+    isLoading = true;
+    details =
+        await detailsRepository?.getDetailsMovie(Get.arguments["movie_id"]);
     isLoading = false;
     update();
   }
