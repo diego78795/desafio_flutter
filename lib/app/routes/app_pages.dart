@@ -11,11 +11,11 @@ part './app_routes.dart';
 abstract class AppPages {
   static final pages = [
     GetPage(
-        name: Routes.HOME,
+        name: Routes.home,
         page: () => const HomePage(),
         binding: HomeBinding()),
     GetPage(
-        name: Routes.DETAILS,
+        name: Routes.details,
         page: () => const DetailsPage(),
         binding: DetailsBinding())
   ];

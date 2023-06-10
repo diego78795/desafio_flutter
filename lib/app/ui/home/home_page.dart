@@ -142,7 +142,7 @@ class CardMovie extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () => {
-              Get.toNamed(Routes.DETAILS, arguments: {"movie_id": movie.id})
+              Get.toNamed(Routes.details, arguments: {"movie_id": movie.id})
             },
         child: SizedBox(
             height: 470.0,
