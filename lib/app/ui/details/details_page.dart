@@ -101,7 +101,8 @@ class DetailsPage extends GetView<DetailsController> {
                           const SizedBox(height: 40),
                           TextMovie(title: 'Diretor', text: _.director),
                           const SizedBox(height: 32),
-                          TextMovie(title: 'Elenco', text: _.cast)
+                          TextMovie(title: 'Elenco', text: _.cast),
+                          const SizedBox(height: 40),
                         ])));
     }));
   }
