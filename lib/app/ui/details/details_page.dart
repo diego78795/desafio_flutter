@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:desafio_flutter/app/routes/app_pages.dart';
 import 'package:desafio_flutter/app/controllers/details_controller.dart';
 
 class DetailsPage extends GetView<DetailsController> {
@@ -76,8 +75,8 @@ class DetailsPage extends GetView<DetailsController> {
                                         '${_.details.runtime ~/ 60}h ${_.details.runtime % 60} min'),
                               ]),
                           const SizedBox(height: 12),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          Wrap(
+                            alignment: WrapAlignment.center,
                             children: _.details.genres
                                 .map((genre) => Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -97,7 +96,7 @@ class BackButton extends GetView<DetailsController> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => {Get.toNamed(Routes.HOME)},
+      onPressed: () => {Get.back()},
       style: ButtonStyle(
           backgroundColor: const MaterialStatePropertyAll<Color>(
               Color.fromRGBO(241, 243, 245, 1)),
