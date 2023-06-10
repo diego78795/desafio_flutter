@@ -32,8 +32,10 @@ class DetailsController extends GetxController {
         .map((director) => director['name'])
         .toString();
     director = director.substring(1, director.length - 1);
-    cast = credits.cast.map((actor) => actor['name']).toString();
-    cast = cast.substring(1, cast.length - 1);
+    for (Map<String, dynamic> actor in credits.cast) {
+      cast = '$cast, ${actor['name']}';
+    }
+    cast = cast.substring(2);
     isLoading = false;
     update();
   }
