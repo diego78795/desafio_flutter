@@ -97,11 +97,7 @@ class DetailsPage extends GetView<DetailsController> {
                           const SizedBox(height: 4),
                           ContainerInfo(
                               field: 'PRODUTORAS: ',
-                              info: _.details.productionCompanies
-                                  .map((companie) => companie['name'])
-                                  .toString()
-                                  .replaceFirst("(", "")
-                                  .replaceFirst(")", "")),
+                              info: _.productionCompanies),
                           const SizedBox(height: 40),
                           TextMovie(title: 'Diretor', text: _.director),
                           const SizedBox(height: 32),

@@ -12,6 +12,7 @@ class DetailsController extends GetxController {
   bool isLoading = true;
 
   DetailsModel details = DetailsModel();
+  String productionCompanies = "";
   String director = "";
   String cast = "";
 
@@ -27,6 +28,10 @@ class DetailsController extends GetxController {
         await detailsRepository?.getDetailsMovie(Get.arguments["movie_id"]);
     CreditsModel credits =
         await detailsRepository?.getCreditsMovie(Get.arguments["movie_id"]);
+    for (Map<String, dynamic> companie in details.productionCompanies) {
+      productionCompanies = '$productionCompanies, ${companie['name']}';
+    }
+    productionCompanies = productionCompanies.substring(2);
     director = credits.crew
         .where((person) => person['job'] == 'Director')
         .map((director) => director['name'])
