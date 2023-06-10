@@ -1,10 +1,11 @@
 import 'dart:convert';
-import 'package:desafio_flutter/app/data/model/details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:desafio_flutter/app/data/model/movie_model.dart';
 import 'package:desafio_flutter/app/data/model/genres_model.dart';
+import 'package:desafio_flutter/app/data/model/details_model.dart';
+import 'package:desafio_flutter/app/data/model/credits_model.dart';
 
 const baseUrl = "https://api.themoviedb.org/3";
 
@@ -77,6 +78,22 @@ class ApiClient {
         return DetailsModel.fromJson(jsonResponse);
       } else {
         debugPrint('Error -apiDetailsMovie');
+      }
+    } catch (e) {
+      debugPrint('Error fetching from API $e');
+    }
+    return {};
+  }
+
+  Future<Object> apiCreditsMovie(int idMovie) async {
+    try {
+      final response = await httpClient!.get(Uri.parse(
+          '$baseUrl/movie/$idMovie/credits?language=pt-BR&api_key=$apiKey'));
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        return CreditsModel.fromJson(jsonResponse);
+      } else {
+        debugPrint('Error -apiCreditsMovie');
       }
     } catch (e) {
       debugPrint('Error fetching from API $e');
