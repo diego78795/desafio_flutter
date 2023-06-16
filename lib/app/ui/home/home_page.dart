@@ -29,7 +29,7 @@ class HomePage extends GetView<HomeController> {
                 padding: EdgeInsets.only(right: 20, bottom: 16),
                 child: SearchInput()),
             SizedBox(
-                height: 28,
+                height: 31,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: _.genresList.length,
@@ -42,22 +42,23 @@ class HomePage extends GetView<HomeController> {
                         genreSelected: _.genreSelected);
                   },
                 )),
-            controller.isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : ListView.separated(
-                    padding: const EdgeInsets.only(top: 39, right: 20),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _.movieList.length,
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: 16);
-                    },
-                    itemBuilder: (context, index) {
-                      return CardMovie(
-                          movie: _.movieList[index],
-                          genres: _.genreMovie(_.movieList[index].genres));
-                    },
-                  )
+            Padding(
+                padding: const EdgeInsets.only(top: 39, right: 20),
+                child: controller.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _.movieList.length,
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: 16);
+                        },
+                        itemBuilder: (context, index) {
+                          return CardMovie(
+                              movie: _.movieList[index],
+                              genres: _.genreMovie(_.movieList[index].genres));
+                        },
+                      ))
           ]));
     }));
   }
@@ -111,15 +112,21 @@ class GenreButton extends StatelessWidget {
         return TextButton(
           onPressed: () async => {await _.handleGenreMovie(genre)},
           style: ButtonStyle(
+            side: MaterialStatePropertyAll<BorderSide>(BorderSide(
+                color: genre.name == genreSelected
+                    ? Colors.transparent
+                    : const Color.fromRGBO(241, 243, 245, 1),
+                width: 1)),
             backgroundColor: MaterialStatePropertyAll<Color>(
                 genre.name == genreSelected
                     ? const Color.fromRGBO(0, 56, 76, 1)
-                    : const Color.fromRGBO(241, 243, 245, 1)),
+                    : Colors.transparent),
             shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(26))),
           ),
           child: Text(genre.name,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: genre.name == genreSelected
                     ? const Color.fromRGBO(241, 243, 245, 1)
