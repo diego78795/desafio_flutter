@@ -85,10 +85,12 @@ class SearchInput extends StatelessWidget {
                   borderSide: const BorderSide(color: Colors.transparent),
                   borderRadius: BorderRadius.circular(100)),
               hintText: "Pesquise filmes",
-              prefixIcon: IconButton(
-                icon: const Icon(Icons.search),
+              prefixIcon: Image.asset('assets/images/icons/searchIcon.png')
+              /* IconButton(
+                icon: const Icon(Icons.sear),
                 onPressed: () => _.searchMovie(searchText.text.toString()),
-              )),
+              ) */
+              ),
         );
       },
     );
