@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:desafio_flutter/app/routes/app_pages.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:desafio_flutter/app/data/model/movie_model.dart';
 import 'package:desafio_flutter/app/data/model/genres_model.dart';
 import 'package:desafio_flutter/app/controllers/home_controller.dart';
@@ -168,8 +169,10 @@ class CardMovie extends StatelessWidget {
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: movie.img != null
-                            ? Image.network(
-                                'https://image.tmdb.org/t/p/w300${movie.img}',
+                            ? Image(
+                                image: CachedNetworkImageProvider(
+                                  'https://image.tmdb.org/t/p/w300${movie.img}',
+                                ),
                                 fit: BoxFit.fitHeight,
                               )
                             : Container(
