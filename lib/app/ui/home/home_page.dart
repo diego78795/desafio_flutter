@@ -13,52 +13,52 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(body: GetBuilder<HomeController>(builder: (_) {
       return SafeArea(
-          child: Center(
-              child: controller.isLoading
-                  ? const CircularProgressIndicator()
-                  : SizedBox(
-                      width: 320,
-                      child: ListView(shrinkWrap: true, children: [
-                        const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 24),
-                            child: Text('Filmes',
-                                style: TextStyle(
-                                    color: Color.fromRGBO(52, 58, 64, 1),
-                                    fontFamily: 'Montserrat',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18))),
-                        const SearchInput(),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                            height: 28,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: _.genresList.length,
-                              separatorBuilder: (context, index) {
-                                return const SizedBox(width: 12);
-                              },
-                              itemBuilder: (context, index) {
-                                return GenreButton(
-                                    genre: _.genresList[index],
-                                    genreSelected: _.genreSelected);
-                              },
-                            )),
-                        const SizedBox(height: 39),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _.movieList.length,
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(height: 16);
-                          },
-                          itemBuilder: (context, index) {
-                            return CardMovie(
-                                movie: _.movieList[index],
-                                genres:
-                                    _.genreMovie(_.movieList[index].genres));
-                          },
-                        )
-                      ]))));
+          child: ListView(
+              padding: const EdgeInsets.only(left: 20),
+              shrinkWrap: true,
+              children: [
+            const Padding(
+                padding: EdgeInsets.symmetric(vertical: 24),
+                child: Text('Filmes',
+                    style: TextStyle(
+                        color: Color.fromRGBO(52, 58, 64, 1),
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18))),
+            const Padding(
+                padding: EdgeInsets.only(right: 20, bottom: 16),
+                child: SearchInput()),
+            SizedBox(
+                height: 28,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _.genresList.length,
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(width: 12);
+                  },
+                  itemBuilder: (context, index) {
+                    return GenreButton(
+                        genre: _.genresList[index],
+                        genreSelected: _.genreSelected);
+                  },
+                )),
+            controller.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.separated(
+                    padding: const EdgeInsets.only(top: 39, right: 20),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _.movieList.length,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(height: 16);
+                    },
+                    itemBuilder: (context, index) {
+                      return CardMovie(
+                          movie: _.movieList[index],
+                          genres: _.genreMovie(_.movieList[index].genres));
+                    },
+                  )
+          ]));
     }));
   }
 }
@@ -147,8 +147,7 @@ class CardMovie extends StatelessWidget {
               Get.toNamed(Routes.details, arguments: {"movie_id": movie.id})
             },
         child: SizedBox(
-            height: 470.0,
-            width: 320.0,
+            height: 520.0,
             child: Stack(fit: StackFit.expand, children: [
               ShaderMask(
                 shaderCallback: (rect) {
