@@ -76,13 +76,13 @@ class DetailsPage extends GetView<DetailsController> {
                                     info:
                                         '${_.details.runtime ~/ 60}h ${_.details.runtime % 60} min'),
                               ]),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 8),
                           Wrap(
                             alignment: WrapAlignment.center,
                             children: _.details.genres
                                 .map((genre) => Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 4),
+                                        horizontal: 4, vertical: 4),
                                     child: ContainerGenre(
                                         genre: genre['name'].toUpperCase())))
                                 .toList(),
