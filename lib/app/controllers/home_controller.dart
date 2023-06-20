@@ -66,4 +66,13 @@ class HomeController extends GetxController {
     isLoading = false;
     update();
   }
+
+  Future handleRemoveGenreMovie() async {
+    isLoading = true;
+    update();
+    movieList = await movieRepository?.getTrending();
+    genreSelected = '';
+    isLoading = false;
+    update();
+  }
 }
