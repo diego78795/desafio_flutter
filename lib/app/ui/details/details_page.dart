@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:desafio_flutter/app/controllers/details_controller.dart';
 
 class DetailsPage extends GetView<DetailsController> {
@@ -160,8 +161,12 @@ class CardMovie extends GetView<DetailsController> {
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: img != null
-                    ? Image.network(
-                        'https://image.tmdb.org/t/p/w400$img',
+                    ? Image(
+                        image: CachedNetworkImageProvider(
+                          'https://image.tmdb.org/t/p/original$img',
+                          maxHeight: 318,
+                          maxWidth: 216,
+                        ),
                         fit: BoxFit.fitHeight,
                       )
                     : Container(
