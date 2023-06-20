@@ -14,7 +14,7 @@ class HomeController extends GetxController {
       {@required this.movieRepository, @required this.genresRepository})
       : assert(movieRepository != null, genresRepository != null);
 
-  final _genreSelected = "".obs;
+  final _genreSelected = GenresModel().obs;
   get genreSelected => _genreSelected.value;
   set genreSelected(value) => _genreSelected.value = value;
 
@@ -36,7 +36,7 @@ class HomeController extends GetxController {
   }
 
   Future getGenreMovies(GenresModel genre) async {
-    genreSelected = genre.name;
+    genreSelected = genre;
     movieList = await movieRepository?.getGenreMovies(genre.id);
   }
 
@@ -71,7 +71,7 @@ class HomeController extends GetxController {
     isLoading = true;
     update();
     movieList = await movieRepository?.getTrending();
-    genreSelected = '';
+    genreSelected = GenresModel();
     isLoading = false;
     update();
   }

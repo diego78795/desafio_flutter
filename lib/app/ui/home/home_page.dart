@@ -40,7 +40,7 @@ class HomePage extends GetView<HomeController> {
                   itemBuilder: (context, index) {
                     return GenreButton(
                         genre: _.genresList[index],
-                        genreSelected: _.genreSelected);
+                        genreSelected: _.genreSelected.name);
                   },
                 )),
             Padding(
