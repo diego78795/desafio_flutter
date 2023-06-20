@@ -6,6 +6,10 @@ class MovieRepository {
 
   MovieRepository({@required this.apiClient}) : assert(apiClient != null);
 
+  Future getTrending() {
+    return apiClient!.apiTrending();
+  }
+
   Future getGenreMovies(int idGenre) {
     return apiClient!.apiGenreMovies(idGenre);
   }
