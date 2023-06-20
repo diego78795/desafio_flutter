@@ -30,7 +30,7 @@ class HomeController extends GetxController {
 
   Future<void> fetchData() async {
     genresList = await genresRepository?.getGenresList();
-    await getGenreMovies(genresList[0]);
+    movieList = await movieRepository?.getTrending();
     isLoading = false;
     update();
   }
@@ -42,8 +42,10 @@ class HomeController extends GetxController {
 
   String genreMovie(List genres) {
     String genresName = genres
-        .map((genre) =>
-            genresList.where((genreList) => genreList.id == genre).first.name)
+        .map((genre) => genresList
+            .firstWhere((genreList) => genreList.id == genre,
+                orElse: () => GenresModel())
+            .name)
         .toString();
     return genresName.substring(1, genresName.length - 1).replaceAll(",", " -");
   }
