@@ -159,7 +159,7 @@ class CardMovie extends StatelessWidget {
               Get.toNamed(Routes.details, arguments: {"movie_id": movie.id})
             },
         child: SizedBox(
-            height: 520.0,
+            height: 520,
             child: Stack(fit: StackFit.expand, children: [
               ShaderMask(
                 shaderCallback: (rect) {
@@ -175,12 +175,13 @@ class CardMovie extends StatelessWidget {
                         child: movie.img != null
                             ? Image(
                                 image: CachedNetworkImageProvider(
-                                  'https://image.tmdb.org/t/p/w300${movie.img}',
+                                  'https://image.tmdb.org/t/p/original${movie.img}',
+                                  maxHeight: 520,
                                 ),
                                 fit: BoxFit.fitHeight,
                               )
                             : Container(
-                                height: 470.0,
+                                height: 520.0,
                                 width: 320.0,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
