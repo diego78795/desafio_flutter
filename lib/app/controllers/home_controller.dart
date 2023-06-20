@@ -55,6 +55,11 @@ class HomeController extends GetxController {
     update();
     movieList = await movieRepository
         ?.getSearchMovies(searchText.replaceAll(" ", "%20"));
+    if (genreSelected.id != 0) {
+      movieList = movieList
+          .where((movie) => movie.genres.contains(genreSelected.id))
+          .toList();
+    }
     isLoading = false;
     update();
   }
