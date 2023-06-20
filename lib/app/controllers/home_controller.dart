@@ -18,6 +18,10 @@ class HomeController extends GetxController {
   get genreSelected => _genreSelected.value;
   set genreSelected(value) => _genreSelected.value = value;
 
+  final _searchText = ''.obs;
+  get searchText => _searchText.value;
+  set searchText(value) => _searchText.value = value;
+
   bool isLoading = true;
   List<MovieModel> movieList = [];
   List<GenresModel> genresList = [];

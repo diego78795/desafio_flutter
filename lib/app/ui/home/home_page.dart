@@ -73,8 +73,10 @@ class SearchInput extends StatelessWidget {
     var searchText = TextEditingController();
     return GetBuilder<HomeController>(
       builder: (_) {
+        searchText.text = _.searchText;
         return TextField(
           controller: searchText,
+          onChanged: (value) => {_.searchText = value},
           onSubmitted: (text) => _.searchMovie(text),
           decoration: InputDecoration(
               filled: true,
