@@ -111,7 +111,11 @@ class GenreButton extends StatelessWidget {
     return GetBuilder<HomeController>(
       builder: (_) {
         return TextButton(
-          onPressed: () async => {await _.handleGenreMovie(genre)},
+          onPressed: () async => {
+            genre.name == genreSelected
+                ? await _.handleRemoveGenreMovie()
+                : await _.handleGenreMovie(genre)
+          },
           style: ButtonStyle(
             side: MaterialStatePropertyAll<BorderSide>(BorderSide(
                 color: genre.name == genreSelected
