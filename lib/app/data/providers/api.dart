@@ -54,7 +54,7 @@ class ApiClient {
   Future<List<MovieModel>> apiTrending() async {
     try {
       final response = await httpClient!.get(Uri.parse(
-          '$baseUrl/trending/all/week?language=pt-BR&api_key=$apiKey'));
+          '$baseUrl/trending/movie/week?language=pt-BR&api_key=$apiKey'));
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body)["results"];
         return jsonResponse.map((movieJson) {
