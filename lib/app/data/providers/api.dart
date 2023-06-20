@@ -51,6 +51,24 @@ class ApiClient {
     return [];
   }
 
+  Future<List<MovieModel>> apiTrending() async {
+    try {
+      final response = await httpClient!.get(Uri.parse(
+          '$baseUrl/trending/all/week?language=pt-BR&api_key=$apiKey'));
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = jsonDecode(response.body)["results"];
+        return jsonResponse.map((movieJson) {
+          return MovieModel.fromJson(movieJson);
+        }).toList();
+      } else {
+        debugPrint('Error -apiTrending');
+      }
+    } catch (e) {
+      debugPrint('Error fetching from API $e');
+    }
+    return [];
+  }
+
   Future<List<GenresModel>> apiGenresList() async {
     try {
       final response = await httpClient!.get(Uri.parse(
