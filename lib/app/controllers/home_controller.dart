@@ -14,9 +14,13 @@ class HomeController extends GetxController {
       {@required this.movieRepository, @required this.genresRepository})
       : assert(movieRepository != null, genresRepository != null);
 
-  final _genreSelected = "".obs;
+  final _genreSelected = GenresModel().obs;
   get genreSelected => _genreSelected.value;
   set genreSelected(value) => _genreSelected.value = value;
+
+  final _searchText = ''.obs;
+  get searchText => _searchText.value;
+  set searchText(value) => _searchText.value = value;
 
   bool isLoading = true;
   List<MovieModel> movieList = [];
@@ -30,20 +34,22 @@ class HomeController extends GetxController {
 
   Future<void> fetchData() async {
     genresList = await genresRepository?.getGenresList();
-    await getGenreMovies(genresList[0]);
+    movieList = await movieRepository?.getTrending();
     isLoading = false;
     update();
   }
 
   Future getGenreMovies(GenresModel genre) async {
-    genreSelected = genre.name;
+    genreSelected = genre;
     movieList = await movieRepository?.getGenreMovies(genre.id);
   }
 
   String genreMovie(List genres) {
     String genresName = genres
-        .map((genre) =>
-            genresList.where((genreList) => genreList.id == genre).first.name)
+        .map((genre) => genresList
+            .firstWhere((genreList) => genreList.id == genre,
+                orElse: () => GenresModel())
+            .name)
         .toString();
     return genresName.substring(1, genresName.length - 1).replaceAll(",", " -");
   }
@@ -53,6 +59,11 @@ class HomeController extends GetxController {
     update();
     movieList = await movieRepository
         ?.getSearchMovies(searchText.replaceAll(" ", "%20"));
+    if (genreSelected.id != 0) {
+      movieList = movieList
+          .where((movie) => movie.genres.contains(genreSelected.id))
+          .toList();
+    }
     isLoading = false;
     update();
   }
@@ -61,6 +72,15 @@ class HomeController extends GetxController {
     isLoading = true;
     update();
     await getGenreMovies(genre);
+    isLoading = false;
+    update();
+  }
+
+  Future handleRemoveGenreMovie() async {
+    isLoading = true;
+    update();
+    movieList = await movieRepository?.getTrending();
+    genreSelected = GenresModel();
     isLoading = false;
     update();
   }

@@ -9,7 +9,7 @@ class MovieModel {
   MovieModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     img = json['poster_path'];
-    title = json['title'];
+    title = json['title'] ?? json['name'];
     genres = json['genre_ids'];
   }
 

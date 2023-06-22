@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:desafio_flutter/app/routes/app_pages.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:desafio_flutter/app/data/model/movie_model.dart';
 import 'package:desafio_flutter/app/data/model/genres_model.dart';
 import 'package:desafio_flutter/app/controllers/home_controller.dart';
@@ -13,52 +14,53 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(body: GetBuilder<HomeController>(builder: (_) {
       return SafeArea(
-          child: Center(
-              child: controller.isLoading
-                  ? const CircularProgressIndicator()
-                  : SizedBox(
-                      width: 320,
-                      child: ListView(shrinkWrap: true, children: [
-                        const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 24),
-                            child: Text('Filmes',
-                                style: TextStyle(
-                                    color: Color.fromRGBO(52, 58, 64, 1),
-                                    fontFamily: 'Montserrat',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18))),
-                        const SearchInput(),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                            height: 28,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: _.genresList.length,
-                              separatorBuilder: (context, index) {
-                                return const SizedBox(width: 12);
-                              },
-                              itemBuilder: (context, index) {
-                                return GenreButton(
-                                    genre: _.genresList[index],
-                                    genreSelected: _.genreSelected);
-                              },
-                            )),
-                        const SizedBox(height: 39),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _.movieList.length,
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(height: 16);
-                          },
-                          itemBuilder: (context, index) {
-                            return CardMovie(
-                                movie: _.movieList[index],
-                                genres:
-                                    _.genreMovie(_.movieList[index].genres));
-                          },
-                        )
-                      ]))));
+          child: ListView(
+              padding: const EdgeInsets.only(left: 20),
+              shrinkWrap: true,
+              children: [
+            const Padding(
+                padding: EdgeInsets.symmetric(vertical: 24),
+                child: Text('Filmes',
+                    style: TextStyle(
+                        color: Color.fromRGBO(52, 58, 64, 1),
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18))),
+            const Padding(
+                padding: EdgeInsets.only(right: 20, bottom: 16),
+                child: SearchInput()),
+            SizedBox(
+                height: 31,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _.genresList.length,
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(width: 12);
+                  },
+                  itemBuilder: (context, index) {
+                    return GenreButton(
+                        genre: _.genresList[index],
+                        genreSelected: _.genreSelected.name);
+                  },
+                )),
+            Padding(
+                padding: const EdgeInsets.only(top: 39, right: 20),
+                child: controller.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _.movieList.length,
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: 16);
+                        },
+                        itemBuilder: (context, index) {
+                          return CardMovie(
+                              movie: _.movieList[index],
+                              genres: _.genreMovie(_.movieList[index].genres));
+                        },
+                      ))
+          ]));
     }));
   }
 }
@@ -71,8 +73,10 @@ class SearchInput extends StatelessWidget {
     var searchText = TextEditingController();
     return GetBuilder<HomeController>(
       builder: (_) {
+        searchText.text = _.searchText;
         return TextField(
           controller: searchText,
+          onChanged: (value) => {_.searchText = value},
           onSubmitted: (text) => _.searchMovie(text),
           decoration: InputDecoration(
               filled: true,
@@ -85,10 +89,12 @@ class SearchInput extends StatelessWidget {
                   borderSide: const BorderSide(color: Colors.transparent),
                   borderRadius: BorderRadius.circular(100)),
               hintText: "Pesquise filmes",
-              prefixIcon: IconButton(
-                icon: const Icon(Icons.search),
+              prefixIcon: Image.asset('assets/images/icons/searchIcon.png')
+              /* IconButton(
+                icon: const Icon(Icons.sear),
                 onPressed: () => _.searchMovie(searchText.text.toString()),
-              )),
+              ) */
+              ),
         );
       },
     );
@@ -107,17 +113,27 @@ class GenreButton extends StatelessWidget {
     return GetBuilder<HomeController>(
       builder: (_) {
         return TextButton(
-          onPressed: () async => {await _.handleGenreMovie(genre)},
+          onPressed: () async => {
+            genre.name == genreSelected
+                ? await _.handleRemoveGenreMovie()
+                : await _.handleGenreMovie(genre)
+          },
           style: ButtonStyle(
+            side: MaterialStatePropertyAll<BorderSide>(BorderSide(
+                color: genre.name == genreSelected
+                    ? Colors.transparent
+                    : const Color.fromRGBO(241, 243, 245, 1),
+                width: 1)),
             backgroundColor: MaterialStatePropertyAll<Color>(
                 genre.name == genreSelected
                     ? const Color.fromRGBO(0, 56, 76, 1)
-                    : const Color.fromRGBO(241, 243, 245, 1)),
+                    : Colors.transparent),
             shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(26))),
           ),
           child: Text(genre.name,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: genre.name == genreSelected
                     ? const Color.fromRGBO(241, 243, 245, 1)
@@ -145,8 +161,7 @@ class CardMovie extends StatelessWidget {
               Get.toNamed(Routes.details, arguments: {"movie_id": movie.id})
             },
         child: SizedBox(
-            height: 470.0,
-            width: 320.0,
+            height: 520,
             child: Stack(fit: StackFit.expand, children: [
               ShaderMask(
                 shaderCallback: (rect) {
@@ -160,12 +175,15 @@ class CardMovie extends StatelessWidget {
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: movie.img != null
-                            ? Image.network(
-                                'https://image.tmdb.org/t/p/w300${movie.img}',
+                            ? Image(
+                                image: CachedNetworkImageProvider(
+                                  'https://image.tmdb.org/t/p/original${movie.img}',
+                                  maxHeight: 520,
+                                ),
                                 fit: BoxFit.fitHeight,
                               )
                             : Container(
-                                height: 470.0,
+                                height: 520.0,
                                 width: 320.0,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
