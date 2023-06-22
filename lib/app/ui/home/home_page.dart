@@ -44,7 +44,7 @@ class HomePage extends GetView<HomeController> {
                   },
                 )),
             Padding(
-                padding: const EdgeInsets.only(top: 39, right: 20),
+                padding: const EdgeInsets.only(top: 39, right: 20, bottom: 20),
                 child: controller.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : ListView.separated(
@@ -59,7 +59,8 @@ class HomePage extends GetView<HomeController> {
                               movie: _.movieList[index],
                               genres: _.genreMovie(_.movieList[index].genres));
                         },
-                      ))
+                      )),
+            const PaginationWidget(),
           ]));
     }));
   }
@@ -77,7 +78,7 @@ class SearchInput extends StatelessWidget {
         return TextField(
           controller: searchText,
           onChanged: (value) => {_.searchText = value},
-          onSubmitted: (text) => _.searchMovie(text),
+          onSubmitted: (text) => _.handleSearchMovie(),
           decoration: InputDecoration(
               filled: true,
               fillColor: const Color.fromRGBO(241, 243, 245, 1),
@@ -229,5 +230,32 @@ class CardMovie extends StatelessWidget {
                     ],
                   ))
             ])));
+  }
+}
+
+class PaginationWidget extends StatelessWidget {
+  const PaginationWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<HomeController>(
+      builder: (_) {
+        return _.searchText == "" && _.genreSelected.id == 0
+            ? const Row(children: [])
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                    if (_.pagination != 1)
+                      IconButton(
+                          onPressed: () => _.handlePagination(-1),
+                          icon: const Icon(Icons.arrow_back_ios)),
+                    Text('${_.pagination}'),
+                    IconButton(
+                        onPressed: () => _.handlePagination(1),
+                        icon: const Icon(Icons.arrow_forward_ios))
+                  ]);
+      },
+    );
   }
 }
