@@ -15,10 +15,10 @@ class ApiClient {
   final http.Client? httpClient;
 
   ApiClient({@required this.httpClient});
-  Future<List<MovieModel>> apiGenreMovies(int idGenre) async {
+  Future<List<MovieModel>> apiGenreMovies(int idGenre, int page) async {
     try {
       final response = await httpClient!.get(Uri.parse(
-          '$baseUrl/discover/movie?with_genres=$idGenre&language=pt-BR&api_key=$apiKey'));
+          '$baseUrl/discover/movie?with_genres=$idGenre&language=pt-BR&page=$page&api_key=$apiKey'));
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body)["results"];
         return jsonResponse
@@ -33,10 +33,10 @@ class ApiClient {
     return [];
   }
 
-  Future<List<MovieModel>> apiSearchMovies(String searchText) async {
+  Future<List<MovieModel>> apiSearchMovies(String searchText, int page) async {
     try {
       final response = await httpClient!.get(Uri.parse(
-          '$baseUrl/search/movie?query=$searchText&language=pt-BR&api_key=$apiKey'));
+          '$baseUrl/search/movie?query=$searchText&language=pt-BR&page=$page&api_key=$apiKey'));
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body)["results"];
         return jsonResponse

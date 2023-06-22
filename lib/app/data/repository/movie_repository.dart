@@ -10,11 +10,11 @@ class MovieRepository {
     return apiClient!.apiTrending();
   }
 
-  Future getGenreMovies(int idGenre) {
-    return apiClient!.apiGenreMovies(idGenre);
+  Future getGenreMovies(int idGenre, int page) {
+    return apiClient!.apiGenreMovies(idGenre, page);
   }
 
-  Future getSearchMovies(String searchText) {
-    return apiClient!.apiSearchMovies(searchText);
+  Future getSearchMovies(String searchText, int page) {
+    return apiClient!.apiSearchMovies(searchText, page);
   }
 }
