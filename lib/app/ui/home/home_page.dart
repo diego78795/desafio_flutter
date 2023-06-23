@@ -78,6 +78,7 @@ class HeaderSliver extends SliverPersistentHeaderDelegate {
                 SizedBox(
                     height: 31,
                     child: ListView.separated(
+                      padding: const EdgeInsets.only(left: 20),
                       scrollDirection: Axis.horizontal,
                       itemCount: _.genresList.length,
                       separatorBuilder: (context, index) {
