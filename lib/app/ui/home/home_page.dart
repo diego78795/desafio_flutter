@@ -14,39 +14,40 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(body: GetBuilder<HomeController>(builder: (_) {
       return SafeArea(
+          bottom: false,
           child: CustomScrollView(slivers: <Widget>[
-        SliverPersistentHeader(
-          floating: true,
-          delegate: HeaderSliver(),
-        ),
-        SliverList(
-            delegate: SliverChildListDelegate([
-          ListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: controller.isLoading
-                        ? const Center(child: CircularProgressIndicator())
-                        : ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _.movieList.length,
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(height: 16);
-                            },
-                            itemBuilder: (context, index) {
-                              return CardMovie(
-                                  movie: _.movieList[index],
-                                  genres:
-                                      _.genreMovie(_.movieList[index].genres));
-                            },
-                          )),
-                const PaginationWidget(),
-              ])
-        ]))
-      ]));
+            SliverPersistentHeader(
+              floating: true,
+              delegate: HeaderSliver(),
+            ),
+            SliverList(
+                delegate: SliverChildListDelegate([
+              ListView(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: controller.isLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : ListView.separated(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: _.movieList.length,
+                                separatorBuilder: (context, index) {
+                                  return const SizedBox(height: 16);
+                                },
+                                itemBuilder: (context, index) {
+                                  return CardMovie(
+                                      movie: _.movieList[index],
+                                      genres: _.genreMovie(
+                                          _.movieList[index].genres));
+                                },
+                              )),
+                    const PaginationWidget(),
+                  ])
+            ]))
+          ]));
     }));
   }
 }
