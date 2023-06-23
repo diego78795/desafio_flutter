@@ -99,7 +99,7 @@ class HeaderSliver extends SliverPersistentHeaderDelegate {
   double get maxExtent => 210;
 
   @override
-  double get minExtent => 100;
+  double get minExtent => 210;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
