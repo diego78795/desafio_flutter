@@ -200,7 +200,8 @@ class CardMovie extends StatelessWidget {
         onTap: () => {
               Get.toNamed(Routes.details, arguments: {"movie_id": movie.id})
             },
-        child: SizedBox(
+        child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             height: 520,
             child: Stack(fit: StackFit.expand, children: [
               ShaderMask(
