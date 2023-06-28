@@ -22,6 +22,10 @@ class HomeController extends GetxController {
   get searchText => _searchText.value;
   set searchText(value) => _searchText.value = value;
 
+  final _pagination = 1.obs;
+  get pagination => _pagination.value;
+  set pagination(value) => _pagination.value = value;
+
   bool isLoading = true;
   List<MovieModel> movieList = [];
   List<GenresModel> genresList = [];
@@ -41,7 +45,7 @@ class HomeController extends GetxController {
 
   Future getGenreMovies(GenresModel genre) async {
     genreSelected = genre;
-    movieList = await movieRepository?.getGenreMovies(genre.id);
+    movieList = await movieRepository?.getGenreMovies(genre.id, pagination);
   }
 
   String genreMovie(List genres) {
@@ -54,16 +58,21 @@ class HomeController extends GetxController {
     return genresName.substring(1, genresName.length - 1).replaceAll(",", " -");
   }
 
-  Future searchMovie(String searchText) async {
-    isLoading = true;
-    update();
-    movieList = await movieRepository
-        ?.getSearchMovies(searchText.replaceAll(" ", "%20"));
+  Future searchMovie() async {
+    movieList = await movieRepository?.getSearchMovies(
+        searchText.replaceAll(" ", "%20"), pagination);
     if (genreSelected.id != 0) {
       movieList = movieList
           .where((movie) => movie.genres.contains(genreSelected.id))
           .toList();
     }
+  }
+
+  Future handleSearchMovie() async {
+    isLoading = true;
+    update();
+    pagination = 1;
+    await searchMovie();
     isLoading = false;
     update();
   }
@@ -71,6 +80,7 @@ class HomeController extends GetxController {
   Future handleGenreMovie(GenresModel genre) async {
     isLoading = true;
     update();
+    pagination = 1;
     await getGenreMovies(genre);
     isLoading = false;
     update();
@@ -81,6 +91,27 @@ class HomeController extends GetxController {
     update();
     movieList = await movieRepository?.getTrending();
     genreSelected = GenresModel();
+    isLoading = false;
+    update();
+  }
+
+  Future handlePagination(int pagesNumber) async {
+    isLoading = true;
+    update();
+    pagination += pagesNumber;
+    if (searchText == '') {
+      await getGenreMovies(genreSelected);
+    } else {
+      await searchMovie();
+    }
+    if (movieList.isEmpty) {
+      pagination -= pagesNumber;
+      if (searchText == '') {
+        await getGenreMovies(genreSelected);
+      } else {
+        await searchMovie();
+      }
+    }
     isLoading = false;
     update();
   }

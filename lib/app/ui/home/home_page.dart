@@ -14,55 +14,97 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(body: GetBuilder<HomeController>(builder: (_) {
       return SafeArea(
-          child: ListView(
-              padding: const EdgeInsets.only(left: 20),
-              shrinkWrap: true,
-              children: [
-            const Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
-                child: Text('Filmes',
-                    style: TextStyle(
-                        color: Color.fromRGBO(52, 58, 64, 1),
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18))),
-            const Padding(
-                padding: EdgeInsets.only(right: 20, bottom: 16),
-                child: SearchInput()),
-            SizedBox(
-                height: 31,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _.genresList.length,
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(width: 12);
-                  },
-                  itemBuilder: (context, index) {
-                    return GenreButton(
-                        genre: _.genresList[index],
-                        genreSelected: _.genreSelected.name);
-                  },
-                )),
-            Padding(
-                padding: const EdgeInsets.only(top: 39, right: 20),
-                child: controller.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _.movieList.length,
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(height: 16);
-                        },
-                        itemBuilder: (context, index) {
-                          return CardMovie(
-                              movie: _.movieList[index],
-                              genres: _.genreMovie(_.movieList[index].genres));
-                        },
-                      ))
+          bottom: false,
+          child: CustomScrollView(slivers: <Widget>[
+            SliverPersistentHeader(
+              floating: true,
+              delegate: HeaderSliver(),
+            ),
+            SliverList(
+                delegate: SliverChildListDelegate([
+              ListView(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: controller.isLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : ListView.separated(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: _.movieList.length,
+                                separatorBuilder: (context, index) {
+                                  return const SizedBox(height: 16);
+                                },
+                                itemBuilder: (context, index) {
+                                  return CardMovie(
+                                      movie: _.movieList[index],
+                                      genres: _.genreMovie(
+                                          _.movieList[index].genres));
+                                },
+                              )),
+                    const PaginationWidget(),
+                  ])
+            ]))
           ]));
     }));
   }
+}
+
+class HeaderSliver extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return GetBuilder<HomeController>(
+      builder: (_) {
+        return Container(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text('Filmes',
+                        style: TextStyle(
+                            color: Color.fromRGBO(52, 58, 64, 1),
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18))),
+                const Padding(
+                    padding: EdgeInsets.only(
+                        top: 24, right: 20, bottom: 16, left: 20),
+                    child: SearchInput()),
+                SizedBox(
+                    height: 31,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.only(left: 20),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _.genresList.length,
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(width: 12);
+                      },
+                      itemBuilder: (context, index) {
+                        return GenreButton(
+                            genre: _.genresList[index],
+                            genreSelected: _.genreSelected.name);
+                      },
+                    ))
+              ],
+            ));
+      },
+    );
+  }
+
+  @override
+  double get maxExtent => 210;
+
+  @override
+  double get minExtent => 210;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
 }
 
 class SearchInput extends StatelessWidget {
@@ -77,7 +119,7 @@ class SearchInput extends StatelessWidget {
         return TextField(
           controller: searchText,
           onChanged: (value) => {_.searchText = value},
-          onSubmitted: (text) => _.searchMovie(text),
+          onSubmitted: (text) => _.handleSearchMovie(),
           decoration: InputDecoration(
               filled: true,
               fillColor: const Color.fromRGBO(241, 243, 245, 1),
@@ -160,7 +202,8 @@ class CardMovie extends StatelessWidget {
         onTap: () => {
               Get.toNamed(Routes.details, arguments: {"movie_id": movie.id})
             },
-        child: SizedBox(
+        child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             height: 520,
             child: Stack(fit: StackFit.expand, children: [
               ShaderMask(
@@ -229,5 +272,32 @@ class CardMovie extends StatelessWidget {
                     ],
                   ))
             ])));
+  }
+}
+
+class PaginationWidget extends StatelessWidget {
+  const PaginationWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<HomeController>(
+      builder: (_) {
+        return _.searchText == "" && _.genreSelected.id == 0
+            ? const Row(children: [])
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                    if (_.pagination != 1)
+                      IconButton(
+                          onPressed: () => _.handlePagination(-1),
+                          icon: const Icon(Icons.arrow_back_ios)),
+                    Text('${_.pagination}'),
+                    IconButton(
+                        onPressed: () => _.handlePagination(1),
+                        icon: const Icon(Icons.arrow_forward_ios))
+                  ]);
+      },
+    );
   }
 }

@@ -13,105 +13,108 @@ class DetailsPage extends GetView<DetailsController> {
     return Scaffold(body: GetBuilder<DetailsController>(builder: (_) {
       final money = NumberFormat("#,##0");
       return SafeArea(
-          child: controller.isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : ListView(children: [
-                  Stack(fit: StackFit.loose, children: [
-                    Container(
-                      height: 300,
-                      color: const Color.fromRGBO(245, 245, 245, 1),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                            padding:
-                                EdgeInsets.only(top: 24, bottom: 60, left: 20),
-                            child: SizedBox(
-                                height: 32, width: 83, child: BackButton())),
-                        Center(child: CardMovie(img: _.details.img)),
-                      ],
-                    )
-                  ]),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 32),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(_.details.voteAverage.toStringAsFixed(1),
-                              style: const TextStyle(
-                                  color: Color.fromRGBO(0, 56, 76, 1),
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 24)),
-                          const Text('/10',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(134, 142, 150, 1),
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14)),
-                        ],
-                      )),
-                  Text(_.details.title.toUpperCase(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          color: Color.fromRGBO(52, 58, 64, 1),
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14)),
-                  const SizedBox(height: 12),
-                  Text('Titulo original: ${_.details.originalTitle}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          color: Color.fromRGBO(94, 103, 112, 1),
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 10)),
-                  const SizedBox(height: 32),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    ContainerInfo(
-                        field: 'Ano: ',
-                        info: _.details.releaseDate.substring(0, 4)),
-                    const SizedBox(width: 12),
-                    ContainerInfo(
-                        field: 'Duração: ',
-                        info:
-                            '${_.details.runtime ~/ 60}h ${_.details.runtime % 60} min'),
-                  ]),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    children: _.details.genres
-                        .map((genre) => Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 4, vertical: 4),
-                            child: ContainerGenre(
-                                genre: genre['name'].toUpperCase())))
-                        .toList(),
+          child: Stack(fit: StackFit.loose, children: [
+        controller.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView(children: [
+                Stack(fit: StackFit.loose, children: [
+                  Container(
+                    height: 300,
+                    color: const Color.fromRGBO(245, 245, 245, 1),
                   ),
-                  const SizedBox(height: 56),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextMovie(
-                                title: 'Descrição', text: _.details.overview),
-                            const SizedBox(height: 49),
-                            ContainerInfo(
-                                field: 'ORÇAMENTO: ',
-                                info: '\$ ${money.format(_.details.budget)}'),
-                            const SizedBox(height: 4),
-                            ContainerInfo(
-                                field: 'PRODUTORAS: ',
-                                info: _.productionCompanies),
-                            const SizedBox(height: 40),
-                            TextMovie(title: 'Diretor', text: _.director),
-                            const SizedBox(height: 32),
-                            TextMovie(title: 'Elenco', text: _.cast),
-                            const SizedBox(height: 40),
-                          ]))
-                ]));
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 116),
+                        child: Center(child: CardMovie(img: _.details.img)),
+                      ),
+                    ],
+                  )
+                ]),
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(_.details.voteAverage.toStringAsFixed(1),
+                            style: const TextStyle(
+                                color: Color.fromRGBO(0, 56, 76, 1),
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 24)),
+                        const Text('/10',
+                            style: TextStyle(
+                                color: Color.fromRGBO(134, 142, 150, 1),
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14)),
+                      ],
+                    )),
+                Text(_.details.title.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: Color.fromRGBO(52, 58, 64, 1),
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14)),
+                const SizedBox(height: 12),
+                Text('Titulo original: ${_.details.originalTitle}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: Color.fromRGBO(94, 103, 112, 1),
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 10)),
+                const SizedBox(height: 32),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  ContainerInfo(
+                      field: 'Ano: ',
+                      info: _.details.releaseDate.substring(0, 4)),
+                  const SizedBox(width: 12),
+                  ContainerInfo(
+                      field: 'Duração: ',
+                      info:
+                          '${_.details.runtime ~/ 60}h ${_.details.runtime % 60} min'),
+                ]),
+                const SizedBox(height: 8),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  children: _.details.genres
+                      .map((genre) => Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 4),
+                          child: ContainerGenre(
+                              genre: genre['name'].toUpperCase())))
+                      .toList(),
+                ),
+                const SizedBox(height: 56),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextMovie(
+                              title: 'Descrição', text: _.details.overview),
+                          const SizedBox(height: 49),
+                          ContainerInfo(
+                              field: 'ORÇAMENTO: ',
+                              info: '\$ ${money.format(_.details.budget)}'),
+                          const SizedBox(height: 4),
+                          ContainerInfo(
+                              field: 'PRODUTORAS: ',
+                              info: _.productionCompanies),
+                          const SizedBox(height: 40),
+                          TextMovie(title: 'Diretor', text: _.director),
+                          const SizedBox(height: 32),
+                          TextMovie(title: 'Elenco', text: _.cast),
+                          const SizedBox(height: 40),
+                        ]))
+              ]),
+        const Padding(
+            padding: EdgeInsets.only(top: 24, left: 20),
+            child: SizedBox(height: 32, width: 83, child: BackButton()))
+      ]));
     }));
   }
 }
