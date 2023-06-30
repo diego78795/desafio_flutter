@@ -203,8 +203,12 @@ class CardMovie extends StatelessWidget {
               Get.toNamed(Routes.details, arguments: {"movie_id": movie.id})
             },
         child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            margin: const EdgeInsets.symmetric(horizontal: 20),
             height: 520,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: const Color.fromRGBO(200, 200, 200, 1),
+            ),
             child: Stack(fit: StackFit.expand, children: [
               ShaderMask(
                 shaderCallback: (rect) {
@@ -215,32 +219,39 @@ class CardMovie extends StatelessWidget {
                   ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
                 },
                 child: FittedBox(
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: movie.img != null
-                            ? Image(
-                                image: CachedNetworkImageProvider(
-                                  'https://image.tmdb.org/t/p/original${movie.img}',
-                                  maxHeight: 520,
-                                ),
-                                fit: BoxFit.fitHeight,
-                              )
-                            : Container(
-                                height: 520.0,
-                                width: 320.0,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: const Color.fromRGBO(0, 56, 76, 1),
-                                ),
-                                child: const Center(
-                                    child: Text('Este filme não possui imagem',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 20,
-                                        ))),
-                              ))),
+                  fit: BoxFit.none,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: movie.img != null
+                        ? Image(
+                            image: CachedNetworkImageProvider(
+                              'https://image.tmdb.org/t/p/original${movie.img}',
+                              maxHeight: 520,
+                            ),
+                            fit: BoxFit.fitHeight,
+                            loadingBuilder: (context, child, progress) {
+                              if (progress == null) {
+                                return child;
+                              }
+                              return const Center(
+                                  child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                              ));
+                            },
+                          )
+                        : const Center(
+                            child: Text(
+                              'Este filme não possui imagem',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
               ),
               Padding(
                   padding:

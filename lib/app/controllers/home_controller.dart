@@ -45,6 +45,9 @@ class HomeController extends GetxController {
 
   Future getGenreMovies(GenresModel genre) async {
     genreSelected = genre;
+    if (searchText != '') {
+      searchText = '';
+    }
     movieList = await movieRepository?.getGenreMovies(genre.id, pagination);
   }
 
@@ -59,12 +62,12 @@ class HomeController extends GetxController {
   }
 
   Future searchMovie() async {
-    movieList = await movieRepository?.getSearchMovies(
-        searchText.replaceAll(" ", "%20"), pagination);
+    searchText == ''
+        ? movieList = await movieRepository?.getTrending()
+        : movieList = await movieRepository?.getSearchMovies(
+            searchText.replaceAll(" ", "%20"), pagination);
     if (genreSelected.id != 0) {
-      movieList = movieList
-          .where((movie) => movie.genres.contains(genreSelected.id))
-          .toList();
+      genreSelected = GenresModel();
     }
   }
 
