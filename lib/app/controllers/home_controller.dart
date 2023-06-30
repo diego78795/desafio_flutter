@@ -62,8 +62,10 @@ class HomeController extends GetxController {
   }
 
   Future searchMovie() async {
-    movieList = await movieRepository?.getSearchMovies(
-        searchText.replaceAll(" ", "%20"), pagination);
+    searchText == ''
+        ? movieList = await movieRepository?.getTrending()
+        : movieList = await movieRepository?.getSearchMovies(
+            searchText.replaceAll(" ", "%20"), pagination);
     if (genreSelected.id != 0) {
       genreSelected = GenresModel();
     }
